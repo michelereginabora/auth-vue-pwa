@@ -8,13 +8,22 @@
       </div>
       <div class="form-group">
         <label for="password">Senha</label>
-        <input
-          id="password"
-          v-model="password"
-          type="password"
-          placeholder="Digite sua senha"
-          required
-        />
+        <div class="password-container">
+          <input
+            id="password"
+            v-model="password"
+            :type="passwordHidden ? 'password' : 'text'"
+            placeholder="Digite sua senha"
+            required
+          />
+          <div class="icon-container">
+            <i
+              class="fa-solid"
+              :class="passwordHidden ? 'fa-eye' : 'fa-eye-slash'"
+              @click="togglePasswordVisibility"
+            ></i>
+          </div>
+        </div>
       </div>
       <button type="submit">Entrar</button>
     </form>
@@ -23,13 +32,19 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import '@fortawesome/fontawesome-free/css/all.min.css'
 
 const email = ref('')
 const password = ref('')
+const passwordHidden = ref(true)
 
 const handleSubmit = () => {
   console.log('Email:', email.value)
   console.log('Senha:', password.value)
+}
+
+const togglePasswordVisibility = () => {
+  passwordHidden.value = !passwordHidden.value
 }
 </script>
 
@@ -86,5 +101,36 @@ button {
 
 button:hover {
   background-color: #358a6e;
+}
+
+.password-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  padding-right: 40px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.icon-container {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+i {
+  color: #ccc;
+}
+
+i:hover {
+  color: #000;
 }
 </style>
