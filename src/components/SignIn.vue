@@ -1,6 +1,9 @@
 <template>
   <div class="login-container">
     <form @submit.prevent="handleSubmit" class="login-form">
+      <div v-if="isSmallScreen" class="image-logo">
+        <img :src="imageUrl" alt="Logo" class="generic-image" />
+      </div>
       <h2 class="title">AuthVue</h2>
       <div class="form-group">
         <label for="email">Email</label>
@@ -31,12 +34,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 
+const imageUrl = 'https://vuejs.org/images/logo.png'
 const email = ref('')
 const password = ref('')
 const passwordHidden = ref(true)
+
+const isSmallScreen = ref(window.innerWidth <= 1024)
+
+const handleResize = () => {
+  isSmallScreen.value = window.innerWidth <= 1024
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize)
+})
 
 const handleSubmit = () => {
   console.log('Email:', email.value)
@@ -54,6 +72,18 @@ const togglePasswordVisibility = () => {
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+.image-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1024px) {
+  .generic-image {
+    max-width: 80px;
+  }
 }
 
 .title {
