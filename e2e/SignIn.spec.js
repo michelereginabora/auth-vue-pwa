@@ -18,11 +18,19 @@ test.describe('Login Page', () => {
     await expect(passwordInput).toBeVisible()
     await expect(submitButton).toBeVisible()
 
+    // Verifica a presença do ícone de alternância de senha
+    const passwordToggleIcon = page.locator('.icon-container i')
+    await expect(passwordToggleIcon).toBeVisible()
+
     // Preenche o formulário e submete
     await emailInput.fill('teste@exemplo.com')
     await passwordInput.fill('senha123')
     await submitButton.click()
 
-    // Verifica se o formulário foi submetido (pode precisar ajustar conforme o comportamento real)
+    // Testa a validação do email
+    await emailInput.fill('invalid-email')
+    await emailInput.blur()
+    const errorMessage = page.locator('.error-message')
+    await expect(errorMessage).toHaveText('Insira um e-mail válido')
   })
 })

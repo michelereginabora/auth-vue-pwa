@@ -1,14 +1,27 @@
 <template>
   <div class="login-container">
     <form @submit.prevent="handleSubmit" class="login-form">
+      <!-- Exibe logo apenas em telas pequenas -->
       <div v-if="isSmallScreen" class="image-logo">
         <img :src="imageUrl" alt="Logo" class="generic-image" />
       </div>
+
       <h2 class="title">AuthVue</h2>
+
       <div class="form-group">
         <label for="email">Email</label>
-        <input id="email" v-model="email" type="email" placeholder="Digite seu e-mail" required />
+        <input
+          id="email"
+          v-model="email"
+          type="email"
+          placeholder="Digite seu e-mail"
+          required
+          @blur="validateEmail"
+          @input="validateEmail"
+        />
+        <span v-if="showError && emailError" class="error-message">{{ emailError }}</span>
       </div>
+
       <div class="form-group">
         <label for="password">Senha</label>
         <div class="password-container">
@@ -28,6 +41,7 @@
           </div>
         </div>
       </div>
+
       <button type="submit">Entrar</button>
     </form>
   </div>
@@ -41,8 +55,29 @@ const imageUrl = 'https://vuejs.org/images/logo.png'
 const email = ref('')
 const password = ref('')
 const passwordHidden = ref(true)
-
 const isSmallScreen = ref(window.innerWidth <= 1024)
+const emailError = ref('')
+const showError = ref(false)
+
+const validateEmail = () => {
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  if (email.value && !emailPattern.test(email.value)) {
+    emailError.value = 'Insira um e-mail válido'
+    showError.value = true
+  } else {
+    emailError.value = ''
+    showError.value = false
+  }
+}
+
+const handleSubmit = () => {
+  console.log('Email:', email.value)
+  console.log('Senha:', password.value)
+}
+
+const togglePasswordVisibility = () => {
+  passwordHidden.value = !passwordHidden.value
+}
 
 const handleResize = () => {
   isSmallScreen.value = window.innerWidth <= 1024
@@ -55,15 +90,6 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize)
 })
-
-const handleSubmit = () => {
-  console.log('Email:', email.value)
-  console.log('Senha:', password.value)
-}
-
-const togglePasswordVisibility = () => {
-  passwordHidden.value = !passwordHidden.value
-}
 </script>
 
 <style scoped>
@@ -80,10 +106,8 @@ const togglePasswordVisibility = () => {
   margin-bottom: 20px;
 }
 
-@media (max-width: 1024px) {
-  .generic-image {
-    max-width: 80px;
-  }
+.generic-image {
+  max-width: 80px;
 }
 
 .title {
@@ -113,9 +137,11 @@ label {
 
 input {
   width: 100%;
-  padding: 8px;
+  padding: 10px;
+  padding-right: 40px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 button {
@@ -139,13 +165,9 @@ button:hover {
   position: relative;
 }
 
-input {
-  width: 100%;
-  padding: 10px;
-  padding-right: 40px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
+.error-message {
+  color: red;
+  font-size: 0.875em;
 }
 
 .icon-container {
