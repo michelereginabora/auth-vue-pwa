@@ -9,7 +9,10 @@ import SignIn from '../components/SignIn.vue'
 </template>
 
 <style scoped>
-@media (max-width: 768px) {
+.sign-in {
+  margin-right: 10vh;
+}
+@media (max-width: 1024px) {
   .logo {
     display: none;
   }

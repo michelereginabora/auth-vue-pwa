@@ -1,16 +1,39 @@
 <template>
-  <div class="login-container">
-    <form @submit.prevent="handleSubmit" class="login-form">
-      <!-- Exibe logo apenas em telas pequenas -->
-      <div v-if="isSmallScreen" class="image-logo">
+  <div class="signup-container">
+    <form @submit.prevent="handleSubmit" class="signup-form">
+      <div class="image-logo">
         <img :src="imageUrl" alt="Logo" class="logo" />
       </div>
 
-      <h2 class="title">AuthVue</h2>
+      <h2 class="title">Cadastro</h2>
+
+      <div class="form-group">
+        <label for="name">Nome</label>
+        <input id="name" v-model="name" type="text" placeholder="Digite seu nome" required />
+      </div>
+
+      <div class="form-group">
+        <label for="username">Nome de Usuário</label>
+        <input
+          id="username"
+          v-model="username"
+          type="text"
+          placeholder="Digite seu nome de usuário"
+          required
+        />
+      </div>
 
       <div class="form-group">
         <label for="email">Email</label>
-        <input id="email" v-model="email" type="email" placeholder="Digite seu e-mail" required />
+        <input
+          id="email"
+          v-model="email"
+          type="email"
+          placeholder="Digite seu e-mail"
+          required
+          @blur="validateEmail"
+          @input="validateEmail"
+        />
         <span v-if="showError && emailError" class="error-message">{{ emailError }}</span>
       </div>
 
@@ -23,7 +46,10 @@
             :type="passwordHidden ? 'password' : 'text'"
             placeholder="Digite sua senha"
             required
+            autocomplete="new-password"
+            @input="checkPasswordStrength"
           />
+
           <div class="icon-container">
             <i
               class="fa-solid"
@@ -32,31 +58,37 @@
             ></i>
           </div>
         </div>
+
+        <div v-if="isPasswordTouched && password.length > 0" class="password-strength">
+          <div
+            class="strength-bar"
+            :class="['strength-' + passwordStrength]"
+            :style="{ width: strengthWidth }"
+          ></div>
+          <span class="strength-text">{{ strengthText }}</span>
+        </div>
       </div>
 
-      <button type="submit">Entrar</button>
-      <button type="button" style="margin-top: 10px" @click="navigateToSignUp">Cadastrar</button>
+      <button type="submit">Cadastrar</button>
     </form>
   </div>
 </template>
-
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import '@fortawesome/fontawesome-free/css/all.min.css'
-import router from '@/router'
+import { ref, computed } from 'vue'
 import validator from 'validator'
+import '@fortawesome/fontawesome-free/css/all.min.css'
+import zxcvbn from 'zxcvbn'
 
 const imageUrl = 'https://vuejs.org/images/logo.png'
+const name = ref('')
+const username = ref('')
 const email = ref('')
 const password = ref('')
 const passwordHidden = ref(true)
-const isSmallScreen = ref(window.innerWidth <= 1024)
 const emailError = ref('')
 const showError = ref(false)
-
-const navigateToSignUp = () => {
-  router.push({ name: 'signup' })
-}
+const passwordStrength = ref<number>(0)
+const isPasswordTouched = ref(false)
 
 const validateEmail = () => {
   if (email.value && !validator.isEmail(email.value)) {
@@ -67,8 +99,23 @@ const validateEmail = () => {
     showError.value = false
   }
 }
+
+const checkPasswordStrength = () => {
+  isPasswordTouched.value = true
+  const result = zxcvbn(password.value)
+  passwordStrength.value = result.score
+}
+
+const strengthText = computed(
+  () => ['Muito Fraca', 'Fraca', 'Moderada', 'Forte', 'Muito Forte'][passwordStrength.value] || ''
+)
+const strengthWidth = computed(
+  () => ['0%', '25%', '50%', '75%', '100%'][passwordStrength.value] || '0%'
+)
+
 const handleSubmit = () => {
-  validateEmail()
+  console.log('Nome:', name.value)
+  console.log('Nome de Usuário:', username.value)
   console.log('Email:', email.value)
   console.log('Senha:', password.value)
 }
@@ -76,26 +123,15 @@ const handleSubmit = () => {
 const togglePasswordVisibility = () => {
   passwordHidden.value = !passwordHidden.value
 }
-
-const handleResize = () => {
-  isSmallScreen.value = window.innerWidth <= 1024
-}
-
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize)
-})
 </script>
 
 <style scoped>
-.login-container {
+.signup-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  width: 100vh;
 }
 
 .image-logo {
@@ -115,12 +151,13 @@ onBeforeUnmount(() => {
   font-family: cursive;
 }
 
-.login-form {
+.signup-form {
   background: white;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  height: auto;
+  width: 500px;
 }
 
 .form-group {
@@ -163,6 +200,11 @@ button:hover {
   position: relative;
 }
 
+.password-suggestion {
+  font-size: 0.875em;
+  color: #555;
+}
+
 .error-message {
   color: red;
   font-size: 0.875em;
@@ -182,5 +224,40 @@ i {
 
 i:hover {
   color: #000;
+}
+
+.password-strength {
+  margin-top: 10px;
+}
+
+.strength-bar {
+  height: 5px;
+  border-radius: 2px;
+  background-color: #e0e0e0;
+}
+
+.strength-bar.strength-0 {
+  background-color: red;
+}
+
+.strength-bar.strength-1 {
+  background-color: orange;
+}
+
+.strength-bar.strength-2 {
+  background-color: yellow;
+}
+
+.strength-bar.strength-3 {
+  background-color: lightgreen;
+}
+
+.strength-bar.strength-4 {
+  background-color: green;
+}
+
+.strength-text {
+  margin-top: 5px;
+  font-size: smaller;
 }
 </style>
