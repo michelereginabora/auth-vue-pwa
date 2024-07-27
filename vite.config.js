@@ -13,9 +13,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
-        name: 'My PWA Project',
-        short_name: 'MyPWA',
-        description: 'My awesome Progressive Web App!',
+        name: 'Auth Vue PWA',
+        short_name: 'Auth Vue',
+        description: 'Auth Vue Web App!',
         theme_color: '#4DBA87',
         background_color: '#ffffff',
         display: 'standalone',
