@@ -79,6 +79,7 @@ import validator from 'validator'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import zxcvbn from 'zxcvbn'
 import { api } from '../boot/axios'
+import router from '@/router'
 
 const imageUrl = 'https://vuejs.org/images/logo.png'
 const name = ref('')
@@ -126,6 +127,7 @@ const handleSubmit = async () => {
       password: password.value
     })
     console.log('Cadastro realizado com sucesso:', response.data)
+    router.push({ name: 'welcome' })
   } catch (error) {
     console.error('Erro ao realizar cadastro:', error)
   }
