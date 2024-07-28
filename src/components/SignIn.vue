@@ -35,6 +35,7 @@
       </div>
 
       <button type="submit">Entrar</button>
+      <p v-if="loginError">{{ loginError }}</p>
       <button type="button" style="margin-top: 10px" @click="navigateToSignUp">Cadastrar</button>
     </form>
   </div>
@@ -45,6 +46,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import router from '@/router'
 import validator from 'validator'
+import { api } from '../boot/axios'
 
 const imageUrl = 'https://vuejs.org/images/logo.png'
 const email = ref('')
@@ -53,6 +55,7 @@ const passwordHidden = ref(true)
 const isSmallScreen = ref(window.innerWidth <= 1024)
 const emailError = ref('')
 const showError = ref(false)
+const loginError = ref(false)
 
 const navigateToSignUp = () => {
   router.push({ name: 'signup' })
@@ -67,10 +70,33 @@ const validateEmail = () => {
     showError.value = false
   }
 }
-const handleSubmit = () => {
+
+const handleSubmit = async () => {
   validateEmail()
+  if (loginError.value) return
+
   console.log('Email:', email.value)
   console.log('Senha:', password.value)
+
+  try {
+    // Usando a API de teste para buscar todos os posts
+    const response = await api.get('/posts')
+    const users = response.data
+
+    // Simulação de verificação de login
+    const user = users.find(
+      (user) => user.email === email.value && user.password === password.value
+    )
+
+    if (user) {
+      console.log('Login bem-sucedido:', user)
+    } else {
+      loginError.value = 'Email ou senha inválidos'
+    }
+  } catch (error) {
+    console.error('Erro ao realizar login:', error)
+    loginError.value = 'Erro ao realizar login'
+  }
 }
 
 const togglePasswordVisibility = () => {
