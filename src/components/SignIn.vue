@@ -9,19 +9,25 @@
       <h2 class="title">AuthVue</h2>
 
       <div class="form-group">
-        <label for="email">Email</label>
-        <input id="email" v-model="email" type="email" placeholder="Digite seu e-mail" required />
+        <label for="email">{{ $t('message.email') }}</label>
+        <input
+          id="email"
+          v-model="email"
+          type="email"
+          :placeholder="t('placeholder.email')"
+          required
+        />
         <span v-if="showError && emailError" class="error-message">{{ emailError }}</span>
       </div>
 
       <div class="form-group">
-        <label for="password">Senha</label>
+        <label for="password">{{ $t('message.password') }}</label>
         <div class="password-container">
           <input
             id="password"
             v-model="password"
             :type="passwordHidden ? 'password' : 'text'"
-            placeholder="Digite sua senha"
+            :placeholder="t('placeholder.password')"
             required
           />
           <div class="icon-container">
@@ -34,8 +40,10 @@
         </div>
       </div>
 
-      <button type="submit">Entrar</button>
-      <button type="button" style="margin-top: 10px" @click="navigateToSignUp">Cadastrar</button>
+      <button type="submit">{{ $t('message.login') }}</button>
+      <button type="button" style="margin-top: 10px" @click="navigateToSignUp">
+        {{ $t('message.signup') }}
+      </button>
     </form>
   </div>
 </template>
@@ -45,6 +53,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import router from '@/router'
 import validator from 'validator'
+import { useI18n } from 'vue-i18n'
 
 const imageUrl = 'https://vuejs.org/images/logo.png'
 const email = ref('')
@@ -54,13 +63,15 @@ const isSmallScreen = ref(window.innerWidth <= 1024)
 const emailError = ref('')
 const showError = ref(false)
 
+const { t } = useI18n()
+
 const navigateToSignUp = () => {
   router.push({ name: 'signup' })
 }
 
 const validateEmail = () => {
   if (email.value && !validator.isEmail(email.value)) {
-    emailError.value = 'Insira um e-mail válido'
+    emailError.value = t('message.validateemail')
     showError.value = true
   } else {
     emailError.value = ''

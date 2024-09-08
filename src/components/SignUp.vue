@@ -5,31 +5,31 @@
         <img :src="imageUrl" alt="Logo" class="logo" />
       </div>
 
-      <h2 class="title">Cadastro</h2>
+      <h2 class="title">{{ $t('message.signup') }}</h2>
 
       <div class="form-group">
-        <label for="name">Nome</label>
-        <input id="name" v-model="name" type="text" placeholder="Digite seu nome" required />
+        <label for="name">{{ $t('message.name') }}</label>
+        <input id="name" v-model="name" type="text" :placeholder="t('placeholder.name')" required />
       </div>
 
       <div class="form-group">
-        <label for="username">Nome de Usuário</label>
+        <label for="username">{{ $t('message.username') }}</label>
         <input
           id="username"
           v-model="username"
           type="text"
-          placeholder="Digite seu nome de usuário"
+          :placeholder="t('placeholder.username')"
           required
         />
       </div>
 
       <div class="form-group">
-        <label for="email">Email</label>
+        <label for="email">{{ $t('message.email') }}</label>
         <input
           id="email"
           v-model="email"
           type="email"
-          placeholder="Digite seu e-mail"
+          :placeholder="t('placeholder.email')"
           required
           @blur="validateEmail"
           @input="validateEmail"
@@ -38,13 +38,13 @@
       </div>
 
       <div class="form-group">
-        <label for="password">Senha</label>
+        <label for="password">{{ $t('message.password') }}</label>
         <div class="password-container">
           <input
             id="password"
             v-model="password"
             :type="passwordHidden ? 'password' : 'text'"
-            placeholder="Digite sua senha"
+            :placeholder="t('placeholder.password')"
             required
             autocomplete="new-password"
             @input="checkPasswordStrength"
@@ -69,7 +69,7 @@
         </div>
       </div>
 
-      <button type="submit">Cadastrar</button>
+      <button type="submit">{{ $t('message.signup') }}</button>
     </form>
   </div>
 </template>
@@ -78,6 +78,9 @@ import { ref, computed } from 'vue'
 import validator from 'validator'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import zxcvbn from 'zxcvbn'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const imageUrl = 'https://vuejs.org/images/logo.png'
 const name = ref('')
@@ -92,7 +95,7 @@ const isPasswordTouched = ref(false)
 
 const validateEmail = () => {
   if (email.value && !validator.isEmail(email.value)) {
-    emailError.value = 'Insira um e-mail válido'
+    emailError.value = t('message.validateemail')
     showError.value = true
   } else {
     emailError.value = ''
@@ -106,9 +109,17 @@ const checkPasswordStrength = () => {
   passwordStrength.value = result.score
 }
 
-const strengthText = computed(
-  () => ['Muito Fraca', 'Fraca', 'Moderada', 'Forte', 'Muito Forte'][passwordStrength.value] || ''
-)
+const strengthText = computed(() => {
+  const strengths = [
+    t('password.veryWeak'),
+    t('password.weak'),
+    t('password.moderate'),
+    t('password.strong'),
+    t('password.veryStrong')
+  ]
+  return strengths[passwordStrength.value] || ''
+})
+
 const strengthWidth = computed(
   () => ['0%', '25%', '50%', '75%', '100%'][passwordStrength.value] || '0%'
 )
