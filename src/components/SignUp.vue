@@ -81,6 +81,8 @@ import zxcvbn from 'zxcvbn'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+import { api } from '../boot/axios'
+import router from '@/router'
 
 const imageUrl = 'https://vuejs.org/images/logo.png'
 const name = ref('')
@@ -124,11 +126,22 @@ const strengthWidth = computed(
   () => ['0%', '25%', '50%', '75%', '100%'][passwordStrength.value] || '0%'
 )
 
-const handleSubmit = () => {
-  console.log('Nome:', name.value)
-  console.log('Nome de Usuário:', username.value)
-  console.log('Email:', email.value)
-  console.log('Senha:', password.value)
+const handleSubmit = async () => {
+  validateEmail()
+  if (emailError.value) return
+
+  try {
+    const response = await api.post('/posts', {
+      name: name.value,
+      username: username.value,
+      email: email.value,
+      password: password.value
+    })
+    console.log('Cadastro realizado com sucesso:', response.data)
+    router.push({ name: 'welcome' })
+  } catch (error) {
+    console.error('Erro ao realizar cadastro:', error)
+  }
 }
 
 const togglePasswordVisibility = () => {
