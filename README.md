@@ -14,7 +14,8 @@ O projeto AuthVue tem como objetivo inicial desenvolver uma tela de login. Este 
 - **JSX**: Suporte para escrever componentes Vue com JSX.
 - **Vue Router**: Gerenciamento de rotas para navegação na aplicação.
 - **Pinia**: Biblioteca de gerenciamento de estado para Vue.js.
-- **PWA**: Recursos para transformar o aplicativo em uma Progressive Web App.
+- **PWA**: Recursos para transformar a aplicação em uma Progressive Web App.
+- **i18n**: Recurso que permite a utilização da aplicação em múltiplos idiomas.
 
 ## Testes
 
@@ -81,3 +82,13 @@ npm run test:e2e
 ```sh
 npm run lint
 ```
+</br>
+
+# Interface:
+</br>
+
+![Captura de tela 2024-09-08 193054](https://github.com/user-attachments/assets/11892429-59e4-40b4-bbd3-a73a0f3b2a85)
+
+![Captura de tela 2024-09-08 193124](https://github.com/user-attachments/assets/7d4e1dac-7586-41f8-b761-942ca671fc8f)
+
+
