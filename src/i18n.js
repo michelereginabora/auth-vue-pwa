@@ -3,6 +3,7 @@ import { createI18n } from 'vue-i18n'
 const messages = {
   en: {
     message: {
+      home: 'Home',
       email: 'E-mail',
       password: 'Password',
       login: 'Login',
@@ -29,6 +30,7 @@ const messages = {
   },
   pt: {
     message: {
+      home: 'Início',
       email: 'E-mail',
       password: 'Senha',
       login: 'Entrar',

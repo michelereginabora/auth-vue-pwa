@@ -1,8 +1,7 @@
 <template>
   <div class="login-container">
     <form @submit.prevent="handleSubmit" class="login-form">
-      <!-- Exibe logo apenas em telas pequenas -->
-      <div v-if="isSmallScreen" class="image-logo">
+      <div class="image-logo">
         <img :src="imageUrl" alt="Logo" class="logo" />
       </div>
 
@@ -41,7 +40,7 @@
       </div>
 
       <button type="submit">{{ $t('message.login') }}</button>
-      <button type="button" style="margin-top: 10px" @click="navigateToSignUp">
+      <button type="button" class="signup-button" @click="navigateToSignUp">
         {{ $t('message.signup') }}
       </button>
     </form>
@@ -131,7 +130,19 @@ onBeforeUnmount(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.login-form {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
 .image-logo {
@@ -142,66 +153,37 @@ onBeforeUnmount(() => {
 
 .logo {
   max-width: 80px;
+  height: auto;
 }
 
 .title {
   color: #22704d;
   margin-bottom: 20px;
   text-align: center;
-  font-family: cursive;
-}
-
-.login-form {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  font-size: 24px;
 }
 
 .form-group {
   margin-bottom: 20px;
-  font-family: cursive;
 }
 
 label {
   display: block;
   margin-bottom: 5px;
+  font-weight: bold;
 }
 
 input {
   width: 100%;
-  padding: 10px;
-  padding-right: 40px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  background-color: #2f9668;
-  color: white;
   font-size: 16px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #358a6e;
 }
 
 .password-container {
-  display: flex;
-  align-items: center;
   position: relative;
-}
-
-.error-message {
-  color: red;
-  font-size: 0.875em;
 }
 
 .icon-container {
@@ -212,11 +194,45 @@ button:hover {
   cursor: pointer;
 }
 
-i {
-  color: #ccc;
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  background-color: #2f9668;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-i:hover {
-  color: #000;
+button:hover {
+  background-color: #358a6e;
+}
+
+.signup-button {
+  margin-top: 10px;
+  background-color: #4a4a4a;
+}
+
+.signup-button:hover {
+  background-color: #5a5a5a;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 20px;
+  }
+
+  input,
+  button {
+    font-size: 14px;
+  }
 }
 </style>

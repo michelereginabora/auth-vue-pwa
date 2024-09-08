@@ -6,6 +6,7 @@ import App from './App.vue'
 import router from './router'
 import './registerServiceWorker'
 import { useLanguageStore } from './stores/language'
+import './styles/global.css'
 
 const app = createApp(App)
 
