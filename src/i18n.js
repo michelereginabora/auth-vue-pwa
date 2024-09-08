@@ -9,7 +9,9 @@ const messages = {
       signup: 'Sign up',
       validateemail: 'Insert a valid e-mail',
       name: 'Name',
-      username: 'Username'
+      username: 'Username',
+      welcome: 'Welcome',
+      welcomemessage: 'Welcome to AuthVue'
     },
     password: {
       veryWeak: 'Very Weak',
@@ -33,7 +35,9 @@ const messages = {
       signup: 'Cadastrar',
       validateemail: 'Insira um e-mail válido',
       name: 'Nome',
-      username: 'Nome de Usuário'
+      username: 'Nome de Usuário',
+      welcome: 'Bem-vindo',
+      welcomemessage: 'Seja bem-vindo ao AuthVue'
     },
     password: {
       veryWeak: 'Muito Fraca',

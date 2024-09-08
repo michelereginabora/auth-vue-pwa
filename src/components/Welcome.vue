@@ -1,9 +1,9 @@
 <template>
   <div class="welcome">
-    <h1>Bem-vindo(a)!</h1>
-    <p>Seu cadastro foi realizado com sucesso.</p>
+    <h1>{{ $t('message.welcome') }}</h1>
+    <p>{{ $t('message.welcomemessage') }}</p>
     <div>
-      <router-link class="login" to="/">Entrar</router-link>
+      <router-link class="login" to="/">{{ $t('message.login') }}</router-link>
     </div>
   </div>
 </template>
